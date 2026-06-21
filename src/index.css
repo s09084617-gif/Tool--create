@@ -1,0 +1,391 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #0f0f11;
+  --surface: #1a1a1f;
+  --surface-hover: #25252d;
+  --border: #2e2e38;
+  --accent: #7c6af7;
+  --accent-hover: #9985ff;
+  --accent-muted: rgba(124, 106, 247, 0.15);
+  --text: #e8e8f0;
+  --text-muted: #888898;
+  --error: #f07070;
+  --success: #6ad68a;
+  --chip-active-bg: var(--accent-muted);
+  --chip-active-border: var(--accent);
+  --radius: 10px;
+  --radius-sm: 6px;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+#root {
+  width: 100%;
+  max-width: 760px;
+}
+
+/* ───────── Composer ───────── */
+.composer {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  position: relative;
+}
+
+/* ───────── Active Tool Bar ───────── */
+.active-tool-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.active-tool-bar__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: var(--accent-muted);
+  border: 1px solid var(--accent);
+  color: var(--accent-hover);
+  border-radius: 20px;
+  padding: 0.18rem 0.55rem 0.18rem 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  user-select: none;
+}
+
+.active-tool-bar__remove {
+  background: none;
+  border: none;
+  color: var(--accent-hover);
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0 0 0 0.15rem;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+.active-tool-bar__remove:hover { opacity: 1; }
+
+/* ───────── Toolbar chips ───────── */
+.composer__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.tool-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: 20px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.tool-chip:hover:not(:disabled) {
+  background: var(--surface-hover);
+  border-color: var(--text-muted);
+  color: var(--text);
+}
+
+.tool-chip--active {
+  background: var(--chip-active-bg);
+  border-color: var(--chip-active-border);
+  color: var(--accent-hover);
+}
+.tool-chip--active:hover:not(:disabled) {
+  background: rgba(124, 106, 247, 0.25);
+}
+
+.tool-chip--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.tool-chip__icon { font-size: 0.9em; }
+
+.composer__menu-btn {
+  background: transparent;
+  border: 1px dashed var(--border);
+  color: var(--text-muted);
+  border-radius: 20px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.composer__menu-btn:hover,
+.composer__menu-btn[aria-expanded="true"] {
+  background: var(--surface-hover);
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+/* ───────── Tool Menu ───────── */
+.composer__menu-wrapper {
+  position: relative;
+}
+
+.tool-menu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  background: #1e1e28;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  min-width: 280px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  overflow: hidden;
+}
+
+.tool-menu__header {
+  padding: 0.6rem 1rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+}
+
+.tool-menu__item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: none;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+  padding: 0.65rem 1rem;
+  text-align: left;
+  transition: background 0.12s;
+}
+.tool-menu__item:hover:not(:disabled) {
+  background: var(--surface-hover);
+}
+.tool-menu__item--checked {
+  background: var(--accent-muted);
+}
+.tool-menu__item--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.tool-menu__item-icon { font-size: 1.1rem; flex-shrink: 0; }
+
+.tool-menu__item-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.tool-menu__item-label {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.tool-menu__item-desc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.tool-menu__item-check {
+  color: var(--accent);
+  font-weight: 700;
+  width: 1rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* ───────── Config Panel ───────── */
+.tool-config-panel {
+  background: var(--surface-hover);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tool-config-panel__label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.tool-config-panel__select {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  padding: 0.25rem 0.5rem;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+.tool-config-panel__select:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* ───────── Textarea ───────── */
+.composer__textarea {
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  padding: 0.7rem 0.85rem;
+  resize: vertical;
+  min-height: 90px;
+  transition: border-color 0.15s;
+  font-family: inherit;
+}
+.composer__textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.composer__textarea::placeholder {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+.composer__textarea:disabled {
+  opacity: 0.6;
+}
+
+/* ───────── Footer ───────── */
+.composer__footer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.composer__error {
+  color: var(--error);
+  font-size: 0.8rem;
+  flex: 1;
+}
+
+.composer__success {
+  color: var(--success);
+  font-size: 0.8rem;
+  flex: 1;
+}
+
+.composer__footer-right {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-left: auto;
+}
+
+.composer__active-count {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.composer__submit {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.45rem 1.1rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+}
+.composer__submit:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+.composer__submit:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ───────── Page wrapper ───────── */
+.app {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.app__header {
+  text-align: center;
+}
+
+.app__title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.app__subtitle {
+  font-size: 0.83rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.app__payload {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+}
+
+.app__payload h2 {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.app__payload pre {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.6;
+}
+
+/* Focus ring for a11y */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
